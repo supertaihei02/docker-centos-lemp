@@ -9,7 +9,8 @@ RUN echo ZONE="$TIMEZONE" > /etc/sysconfig/clock && \
     cp "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime
 RUN yum update -y && \
     rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm && \
-    rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+    rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm && \
+    rpm -ivh http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm
 
 # system.
 RUN yum -y --enablerepo=remi,remi-php55 install sudo openssh-server syslog
@@ -34,7 +35,7 @@ RUN yum -y --enablerepo=remi,remi-php55 install mysql-server php-mysql
 RUN service mysqld start && \
     /usr/bin/mysqladmin -u root password "$LOGINPW"
 
-#monin
+#monit
 RUN yum -y --enablerepo=remi install monit
 ADD monit/monit.nginx /etc/monit.d/nginx
 ADD monit/monit.sshd /etc/monit.d/sshd
